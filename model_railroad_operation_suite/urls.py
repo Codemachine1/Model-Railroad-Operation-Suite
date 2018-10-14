@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^operations/',include('operations.urls') ),
     url(r'^roster/',include('roster.urls') ),
+#    url(r'^clubManagment/',include('clubManagment.urls') ),
+    url(r'^layoutManagement/',include('layoutManagement.urls') ),
 
 ]

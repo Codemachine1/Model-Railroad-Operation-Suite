@@ -1,0 +1,35 @@
+                    <script type="text/javascript" src="">
+                        $(document).load(function(){
+                            print("test 2")
+                            $.getJSON("/layoutManagement/showLayout",function(data,status){
+                                if(status==200){
+                                    for(var index=0;index<data.length;index++)
+                                        print(index)
+                                        $("#stationCards").append(createStationCard(data[index]))
+                                }
+                            })
+                        })
+                    function createStationCard(stationObject){
+                        var sidingListElements=""
+                        var sidingList=stationObject["sidings"]
+                        for(var sidingIndex;sidingIndex<sidingList.length;sidingIndex++){
+                            sidingListElements.concat('<li> ${sidingList[sidingIndex]["milepost"] }: ${sidingList[sidingIndex]["name"] } <i onclick="deleteSidings(${sidingList[sidingIndex]["id"]})" class="glyphicon glyphicon-trash"></i></li>')
+                        }
+                        yardsListElements=""
+                        var yards=stationObject["yards"]
+                        for(var yardsIndex;yardsIndex<yards.length;sidingIndex++){
+                            yardsListElements.concat('<li> ${yards[sidingIndex]["milepost"] }: ${yards[sidingIndex]["name"] } <i onclick="deleteSidings(${sidingList[sidingIndex]["id"]})" class="glyphicon glyphicon-trash"></i></li>')
+                        }
+                        
+                        var card=`<div id="station-${stationObject["id"]}" class="card"></div>`+
+                            `<div class="card-body text-center">`+
+                            `<h3 class="card-title">${stationObject["name"]}</h3>`+
+                            `<p  class="card-text">milepost: ${stationObject["name"]}</p>`+
+                            `<h3 class="card-title">Sidings</h3><ul>`+
+                            `${sidingListElements}</ul>`+
+                            `<h3 class="card-title">yards</h3><ul>`+
+                            yards+
+                            `</ul></div></div>`
+                            return card;
+                }
+                </script>

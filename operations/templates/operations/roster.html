@@ -1,0 +1,130 @@
+<script type="text/javascript">
+            $(document).ready(function(){
+                console.log("test")
+                $.getJSON("https://model-railroad-operation-suite-merge.c9users.io/roster/listCar",function(rawdata,status){
+                    console.log(rawdata[0])
+                    for(var indexCars=0;indexCars<rawdata.length;indexCars++){
+                        console.log(rawdata[indexCars])
+                        var id=rawdata[indexCars]['pk']
+                        $("#car_roster").append(`<div class='card' id='car-${rawdata[indexCars]['pk']}'>`+
+                            "<div class='card-body'>"+
+                            `<p>Number:${rawdata[indexCars]["fields"]['roadNumber']}</p>`+
+                            `<p>Type:${rawdata[indexCars]["fields"]['cartype']}</p>`+
+                            `<p>Road name:${rawdata[indexCars]["fields"]['road_name']}</p>`+
+                            `<button class='btn btn-primary' onclick='deleteCar(${id})'>delete</button>`+
+                            "</div>"+
+                            "</div>")
+                    }
+                })
+                $.getJSON("https://model-railroad-operation-suite-merge.c9users.io/roster/listLocomotive",function(rawdata,status){
+                    console.log(rawdata[0])
+                    for(var indexCars=0;indexCars<rawdata.length;indexCars++){
+                        console.log(rawdata[indexCars])
+                        var id=rawdata[indexCars]['pk']
+                        $("#locomotive_roster").append(`<div class='card' id='locomotive-${rawdata[indexCars]['pk']}'>`+
+                            "<div class='card-body'>"+
+                            `<p>Number:${rawdata[indexCars]["fields"]['roadNumber']}</p>`+
+                            `<p>Type:${rawdata[indexCars]["fields"]['cartype']}</p>`+
+                            `<p>Road name:${rawdata[indexCars]["fields"]['road_name']}</p>`+
+                            `<button class='btn btn-primary' onclick='deleteLocomotive(${id})'>delete</button>`+
+                            "</div>"+
+                            "</div>")
+                    }
+                })
+            })
+    function addNewCar(){
+        var number=$("#car_Number").val()
+        var car_type=$("#car_type").val()
+        var car_name=$("#car_roadName").val()
+        console.log(number)
+        console.log(car_type)
+        console.log(car_name)
+        $.post("https://model-railroad-operation-suite-merge.c9users.io/roster/addCar",
+            {
+            "number":number,
+             "type":car_type,
+             "roadname":car_name},
+             function(data,status){
+                 console.log(data)
+//                 console.log(status)
+                $("#car_roster").append(`<div class='card' id='car-${data}'>`+
+                    "<div class='card-body'"+
+                    `<p>Number:${number}</p>`+
+                    `<p>Type:${car_type}</p>`+
+                    `<p>Road name:${car_name}</p>`+
+                    `<button class='btn btn-primary' onclick='deleteCar(${data})'>delete</button>`+
+                    "</div>"+
+                    "</div>")
+                alert("success")
+                $("#AddNewCarModal").modal('toggle')
+
+            })
+    }
+    function deleteCar(carid){
+        console.log(`car id ${carid}`)
+        $.get(`https://model-railroad-operation-suite-merge.c9users.io/roster/deleteCar?id=${carid}`,function(data,status){
+            if(data=="okay"){
+                alert("success")
+                $(`#car-${carid}`).remove()
+            }
+        })
+    }
+    function addNewLocomotive(){
+        var number=$("#locomotive_Number").val()
+        var car_type=$("#locomotive_type").val()
+        var car_name=$("#locomotive_roadName").val()
+        console.log(number)
+        console.log(car_type)
+        console.log(car_name)
+        $.post("https://model-railroad-operation-suite-merge.c9users.io/roster/addLocomotive",
+            {
+            "number":number,
+             "type":car_type,
+             "locomotive_roadname":car_name},
+             function(data,status){
+                 console.log(status)
+                 console.log(data)
+                $("#locomotive_roster").append(`<div class='card' id='locomotive-${data}'>`+
+                    "<div class='card-body'"+
+                    `<p>Number:${number}</p>`+
+                    `<p>Type:${car_type}</p>`+
+                    `<p>Road name:${car_name}</p>`+
+                    `<button class='btn btn-primary' onclick='deleteLocomotive(${data})'>delete</button>`+
+                    "</div>"+
+                    "</div>")
+                alert("success")
+                $("#AddNewLocomotiveModal").modal('toggle')
+
+            })
+    }
+    function deleteLocomotive(carid){
+        console.log(carid)
+        $.get(`https://model-railroad-operation-suite-merge.c9users.io/roster/deleteLocomotive?id=${carid}`,function(data,status){
+            if(data=="okay"){
+                alert("success")
+                $(`#locomotive-${carid}`).remove()
+            }
+        })
+    }
+</script>
+<h2>Roster</h2>
+<ul class="nav nav-pills">
+    <li class="#active"><a href="#cars_pane" class="nav-item nav-link" data-toggle="pill">cars</a></li>
+    <li><a href="#locomotives_pane" class="nav-item nav-link" data-toggle="pill">locomotives</a></li>
+</ul>
+<div class="tab-content">
+    <div id="cars_pane" class="tab-pane show active fade">
+        <h3>Cars</h3>
+        <div id="car_roster" class="card-deck">
+            {% include "operations/carModal.html" %}
+        </div>
+        <button  data-toggle="modal" data-target="#AddNewCarModal" class="btn btn-primary">add</button>
+    </div>
+    <div id="locomotives_pane" class="tab-pane fade">
+        <h3>Locomotives</h3>
+        <div id="locomotive_roster" class="card-deck">
+            {% include "operations/locomotiveModal.html" %}                            
+        </div>
+        <button  data-toggle="modal" data-target="#AddNewLocomotiveModal" class="btn btn-primary">add</button>
+    </div>
+</div>

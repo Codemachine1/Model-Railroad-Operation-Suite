@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'operations.apps.OperationsConfig',
     'roster.apps.RosterConfig',
+   'layoutManagement',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -120,5 +121,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-
+STATIC_ROOT='/home/ubuntu/workspace/static'
 STATIC_URL = '/static/'
